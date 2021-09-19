@@ -4,8 +4,8 @@
 
 # Compiler settings - Can be customized.
 CC = g++
-CXXFLAGS = -std=c++11 -Wall
-LDFLAGS = 
+CXXFLAGS =
+LDFLAGS = -lncurses
 
 # Makefile settings - Can be customized.
 APPNAME = TooDoo
@@ -32,7 +32,7 @@ WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 all: $(APPNAME)
 
 # Builds the app
-$(APPNAME): $(OBJ)
+$(APPNAME): $(SRC)
 	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Creates the dependecy rules
