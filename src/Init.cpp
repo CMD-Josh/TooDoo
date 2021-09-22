@@ -1,13 +1,35 @@
 #include <ncurses.h>
 #include <string>
 
-std::string VERSION = "21.09.19 DEV BUILD";
-std::string list[5] = {"Project one", "Project Two", "Project Three", "Project Four", "Project Five"};
-short ch, selectedOption = 0;
+using namespace std;
+
+string VERSION = "21.09.21 DEV BUILD";
+string list[5] = {"Project one", "Project Two", "Project Three", "Project Four", "Project Five"};
+char* project;
+short ch, selectedOption, maxTitle = 0;
 const short amountOfProj = sizeof(list)/sizeof(list[0]);
 
 
+// Function takes an array and the size of the array then outputs the highest number of the largest amount of characters in that array.
+int longestWordInArray(string strArr[], size_t str_len){
+    short maxEntry = 0;
+
+    for(int i = 0; i < str_len; i++){
+        if(strArr[i].length() > maxEntry){
+            maxEntry = strArr[i].length();
+        }
+    }
+    return maxEntry;
+}
+
 int main(){
+
+    // Load projects into list from a file
+
+
+    maxTitle = longestWordInArray(list, sizeof(list)/sizeof(list[0]));
+    project = new char[maxTitle];
+
     // Set window up
     WINDOW *wind = initscr(); // Store window
     start_color();
@@ -23,14 +45,21 @@ int main(){
     printw(VERSION.c_str());
     attroff(COLOR_PAIR(1));
     
-    for(int selectedOption = 0; selectedOption < amountOfProj; selectedOption++){ // Loop through and print all projects
-        if(selectedOption == 0){ // Highlight first option
+    for(int i = 0; i < amountOfProj; i++){ // Loop through and print all projects
+        if(i == 0){ // Highlight first option
             attron(A_STANDOUT);
         }else{
             attroff(A_STANDOUT);
         }
 
-        mvprintw(selectedOption+2,4,list[selectedOption].c_str());
+        string formatString = "";
+        formatString.append(" %-");
+        formatString.append(std::to_string(maxTitle + 1)); // add 1 character to add a small padding to the right of a project entry
+        formatString.append("s");
+
+        sprintf(project, formatString.c_str(), list[i].c_str());
+        list[i] = string(project);
+        mvprintw(i+2,4,list[i].c_str());
     }
     refresh();
 
